@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/42wim/go-syslog"
+        "gopkg.in/mcuadros/go-syslog.v2"
 	"github.com/42wim/matterbridge/matterhook"
 	"net"
 	"strings"
@@ -66,7 +66,7 @@ func main() {
 	channel := make(syslog.LogPartsChannel)
 	handler := syslog.NewChannelHandler(channel)
 	server := syslog.NewServer()
-	server.SetFormat(syslog.RFC3164cisco)
+	server.SetFormat(syslog.RFC3164)
 	server.SetHandler(handler)
 	server.ListenUDP(cfg.Listen)
 	server.Boot()
@@ -76,7 +76,7 @@ func main() {
 			if cfg.DebugAll {
 				fmt.Printf("%#v\n", logParts)
 			}
-			if strings.Contains(logParts["tag"].(string), "PARSER") {
+			if strings.Contains(logParts["content"].(string), "PARSER") {
 				var hostname string
 				ip, _, _ := net.SplitHostPort(logParts["client"].(string))
 				names, err := net.LookupAddr(ip)
@@ -98,7 +98,7 @@ func main() {
 				first := ""
 				if !strings.Contains(content, "exec enable") && !strings.Contains(content, "!exec") {
 					if !strings.Contains(user, cfg.OurUser) {
-						first = ":boom: "
+						first = ":eyes: "
 					}
 					now := time.Now().Format(time.Kitchen)
 					msg.Text = first + "**" + strings.TrimSpace(content) + "** " + "*" + strings.TrimSpace(user) + "*@**" + hostname + "**" + " (" + ip + ") - _" + now + "_"
