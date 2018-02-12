@@ -1,5 +1,9 @@
 # Cisco Syslog to Mattermost (csm)
 
+### This is a fork of the Cisco Syslog to Mattermost webhook bridge/translator. The main difference between this and the main package is that this one works with the CSR1000v.
+### I discovered that the CSR1000v uses a slightly different log format ( fields contain different info, there is no "tag" field in the syslog post ). The code has been
+### Adjusted for this change and should now work.
+
 Send in real-time your cisco config changes to mattermost
 Requires mattermost 1.2.0+
 
